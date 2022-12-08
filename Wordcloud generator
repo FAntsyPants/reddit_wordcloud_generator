@@ -1,0 +1,47 @@
+import praw
+import sys, os
+from os import path
+from dotenv import load_dotenv
+import numpy as np
+from PIL import Image
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+load_dotenv('.env')
+os.chdir(sys.path[0])
+SECRET = os.environ.get("SECRET")
+PASSWORD = os.environ.get("PASSWORD")
+
+reddit = praw.Reddit(
+    client_id="IrUeYci-IQsnKEZJ-gMGsQ",
+    client_secret=SECRET,
+    password=PASSWORD,
+    user_agent="PyCharm",
+    username="your_username",
+)
+
+
+# get data directory (using getcwd() is needed to support running example in generated IPython notebook)
+d = path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+
+snoo_mask = np.array(Image.open(path.join(d,"snoo.png")))
+
+stopwords =list(STOPWORDS)
+
+wc = WordCloud(
+    background_color='black',
+    stopwords=stopwords,
+    height=600,
+    width=900,
+    mask=snoo_mask,
+    colormap="OrRd"
+)
+
+with open("comments.txt", "w", encoding='utf-8') as comments:
+    for comment in reddit.redditor("hgmiv926").comments.top(limit=None):
+        comments.write(comment.body.split("\\n", 1)[0][:79])
+
+text = open("comments.txt","r",encoding='utf-8').read()
+wc.generate(text)
+wc.to_file('output.png')
+
+
