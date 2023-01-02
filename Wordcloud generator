@@ -15,7 +15,7 @@ reddit = praw.Reddit(
     client_id="IrUeYci-IQsnKEZJ-gMGsQ",
     client_secret=SECRET,
     password=PASSWORD,
-    user_agent="PyCharm",
+    user_agent="your_user_agent",
     username="your_username",
 )
 
