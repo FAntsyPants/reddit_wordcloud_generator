@@ -37,7 +37,7 @@ wc = WordCloud(
 )
 
 with open("comments.txt", "w", encoding='utf-8') as comments:
-    for comment in reddit.redditor("hgmiv926").comments.top(limit=None):
+    for comment in reddit.redditor("/u/username").comments.top(limit=None):
         comments.write(comment.body.split("\\n", 1)[0][:79])
 
 text = open("comments.txt","r",encoding='utf-8').read()
